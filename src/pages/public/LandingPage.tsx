@@ -47,47 +47,49 @@ export default function LandingPage() {
       const icLastSix = cleanIC.slice(-6);
 
       if (icLastSix.length !== 6) {
-         throw new Error('Sila pastikan No. Kad Pengenalan sah (mempunyai sekurang-kurangnya 6 digit).');
-      }
+             throw new Error('Sila pastikan No. Kad Pengenalan sah (mempunyai sekurang-kurangnya 6 digit).');
+          }
 
-      // 1. Simpan Tempahan Utama
-      const { data: bookingData, error: bookingError } = await supabase
-        .from('bookings')
-        .insert({
-          ticket_no: newTicket,
-          applicant_name: formData.name,
-          ic_last_six: icLastSix,
-          phone: formData.phone,
-          email: formData.email,
-          start_date: startDate,
-          end_date: endDate,
-          duration: duration,
-          original_total: totalAmount,
-          final_total: totalAmount,
-          agreed_terms: agreed
-        })
-        .select()
-        .single();
+          // 1. Jana ID unik terus dari frontend
+          const newBookingId = crypto.randomUUID();
 
-      if (bookingError) throw bookingError;
+          // 2. Simpan Tempahan Utama (Tanpa .select().single())
+          const { error: bookingError } = await supabase
+            .from('bookings')
+            .insert({
+              id: newBookingId,
+              ticket_no: newTicket,
+              applicant_name: formData.name,
+              ic_last_six: icLastSix,
+              phone: formData.phone,
+              email: formData.email,
+              start_date: startDate,
+              end_date: endDate,
+              duration: duration,
+              original_total: totalAmount,
+              final_total: totalAmount,
+              agreed_terms: agreed
+            });
 
-      // 2. Simpan Item Tempahan (Snapshot Harga Semasa)
-      const { error: itemError } = await supabase
-        .from('booking_items')
-        .insert({
-          booking_id: bookingData.id,
-          facility_id: selectedFacility.id,
-          facility_name_snapshot: selectedFacility.name,
-          original_price: selectedFacility.price,
-          reviewed_price: selectedFacility.price,
-          subtotal: totalAmount
-        });
+          if (bookingError) throw bookingError;
 
-      if (itemError) throw itemError;
+          // 3. Simpan Item Tempahan menggunakan ID yang dijana di atas
+          const { error: itemError } = await supabase
+            .from('booking_items')
+            .insert({
+              booking_id: newBookingId,
+              facility_id: selectedFacility.id,
+              facility_name_snapshot: selectedFacility.name,
+              original_price: selectedFacility.price,
+              reviewed_price: selectedFacility.price,
+              subtotal: totalAmount
+            });
 
-      // Berjaya
-      setTicketNo(newTicket);
-      setIsSubmitted(true);
+          if (itemError) throw itemError;
+
+          // Berjaya
+          setTicketNo(newTicket);
+          setIsSubmitted(true);
     } catch (error: any) {
       alert('Ralat: ' + (error.message || 'Gagal menghantar permohonan. Sila cuba lagi.'));
     } finally {
