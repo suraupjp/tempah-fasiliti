@@ -14,17 +14,27 @@ export default function LandingPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [ticketNo, setTicketNo] = useState('');
   const [loading, setLoading] = useState(false);
+  const [adminPhone, setAdminPhone] = useState('');
 
   // Data Borang
   const [formData, setFormData] = useState({ name: '', ic: '', phone: '', email: '' });
 
-  // Ambil senarai fasiliti dari database semasa page dimuatkan
+  // Ambil senarai fasiliti dan tetapan dari database semasa page dimuatkan
   useEffect(() => {
-    const fetchFacilities = async () => {
-      const { data, error } = await supabase.from('facilities').select('*').eq('active', true);
-      if (data && !error) setFacilities(data);
+    const fetchData = async () => {
+      // 1. Tarik Fasiliti
+      const { data: facData, error: facError } = await supabase.from('facilities').select('*').eq('active', true);
+      if (facData && !facError) setFacilities(facData);
+
+      // 2. Tarik Nombor WhatsApp Admin
+      const { data: setData } = await supabase.from('settings').select('value').eq('key', 'site_config').single();
+      if (setData && setData.value && setData.value.whatsapp_number) {
+        // Buang simbol + atau jarak jika ada supaya format wa.me sah
+        const cleanNumber = setData.value.whatsapp_number.replace(/[^0-9]/g, '');
+        setAdminPhone(cleanNumber);
+      }
     };
-    fetchFacilities();
+    fetchData();
   }, []);
 
   const duration = (startDate && endDate) ? Math.max(1, differenceInDays(new Date(endDate), new Date(startDate))) : 0;
@@ -110,9 +120,9 @@ export default function LandingPage() {
             <p className="mt-2 text-sm text-slate-600 font-medium">🟡 MENUNGGU SEMAKAN</p>
           </div>
           <p className="text-sm text-slate-600 mb-6">Sila simpan Ticket Number anda. Anda memerlukannya bersama 6 digit terakhir No. Kad Pengenalan untuk menyemak status permohonan.</p>
-          <a href={`https://wa.me/?text=${encodeURIComponent(whatsappMsg)}`} target="_blank" rel="noreferrer" className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-3">
-            BUKA WHATSAPP AJK
-          </a>
+          <a href={`https://wa.me/${adminPhone}?text=${encodeURIComponent(whatsappMsg)}`} target="_blank" rel="noreferrer" className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-3">
+  Semakan AJK Fasiliti
+</a>
         </div>
       </div>
     );
