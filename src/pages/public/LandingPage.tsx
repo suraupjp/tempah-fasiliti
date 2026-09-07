@@ -108,7 +108,7 @@ export default function LandingPage() {
   };
 
   if (isSubmitted) {
-    const whatsappMsg = `Assalamualaikum AJK Fasiliti Surau PJ Perdana.\nPermohonan tempahan baharu telah diterima.\nTicket: ${ticketNo}\nTarikh: ${startDate} hingga ${endDate}\nSila semak permohonan melalui sistem.`;
+    const whatsappMsg = `Assalamualaikum AJK  Surau PJ Perdana.\nPermohonan tempahan baharu telah diterima.\nTicket: ${ticketNo}\nTarikh: ${startDate} hingga ${endDate}\nSila semak permohonan melalui sistem.`;
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center">
@@ -121,7 +121,7 @@ export default function LandingPage() {
           </div>
           <p className="text-sm text-slate-600 mb-6">Sila simpan Ticket Number anda. Anda memerlukannya bersama 6 digit terakhir No. Kad Pengenalan untuk menyemak status permohonan.</p>
           <a href={`https://wa.me/${adminPhone}?text=${encodeURIComponent(whatsappMsg)}`} target="_blank" rel="noreferrer" className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mb-3">
-  Semakan AJK Fasiliti
+  Semakan AJK 
 </a>
         </div>
       </div>
@@ -138,7 +138,7 @@ export default function LandingPage() {
             {/* Kandungan Logo & Teks */}
             <div className="relative z-10">
               <img src="/logo.png" alt="Logo Surau" className="h-28 mx-auto mb-6 drop-shadow-xl" />
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-amber-400 drop-shadow-md">Sistem Tempahan Fasiliti</h1>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-amber-400 drop-shadow-md">Sistem Tempahan Kemudahan Surau PJ Perdana</h1>
               <p className="text-xl text-emerald-50 font-medium tracking-wide">Surau PJ Perdana</p>
             </div>
           </div>
