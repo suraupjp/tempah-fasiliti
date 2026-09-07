@@ -129,12 +129,19 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-32">
-      {/* Hero Section */}
-      <div className="bg-slate-900 text-white pt-20 pb-32 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Sistem Tempahan Fasiliti</h1>
-        <p className="text-lg text-slate-300">Surau PJ Perdana</p>
-      </div>
+    <div className="min-h-screen bg-emerald-50 pb-32">
+          {/* Hero Section */}
+          <div className="bg-[url('/dewan_solat.jpg')] bg-cover bg-center relative pt-20 pb-32 px-4 text-center border-b-4 border-amber-500 shadow-lg">
+            {/* Lapisan Gelap Hijau */}
+            <div className="absolute inset-0 bg-emerald-900/85"></div>
+            
+            {/* Kandungan Logo & Teks */}
+            <div className="relative z-10">
+              <img src="/logo.png" alt="Logo Surau" className="h-28 mx-auto mb-6 drop-shadow-xl" />
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-amber-400 drop-shadow-md">Sistem Tempahan Fasiliti</h1>
+              <p className="text-xl text-emerald-50 font-medium tracking-wide">Surau PJ Perdana</p>
+            </div>
+          </div>
 
       {/* Kalendar & Carian */}
       <div className="max-w-4xl mx-auto -mt-16 px-4 relative z-10">
@@ -201,7 +208,7 @@ export default function LandingPage() {
               </label>
             </div>
             
-            <button type="submit" disabled={!agreed || loading} className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition text-lg shadow-lg flex items-center justify-center gap-2">
+            <button type="submit" disabled={!agreed || loading} className="w-full bg-emerald-600 hover:bg-emerald-700 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition text-lg shadow-lg flex items-center justify-center gap-2">
               {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : `Hantar Permohonan (${formatCurrency(totalAmount)})`}
             </button>
           </form>
