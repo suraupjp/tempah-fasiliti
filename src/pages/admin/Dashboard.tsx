@@ -4,10 +4,10 @@ import { Clock, CheckCircle, CreditCard, Activity } from 'lucide-react';
 export default function Dashboard() {
   // Mock data sementara
   const stats = [
-    { label: 'Menunggu Semakan', value: '5', icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
-    { label: 'Menunggu Bayaran', value: '2', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
-    { label: 'Diluluskan (Bulan Ini)', value: '12', icon: CheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
-    { label: 'Jumlah Hasil (RM)', value: 'RM 4,200', icon: Activity, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' }
+    { label: 'Menunggu Semakan', value: '0', icon: Clock, color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
+    { label: 'Menunggu Bayaran', value: '0', icon: CreditCard, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+    { label: 'Diluluskan (Bulan Ini)', value: '0', icon: CheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200' },
+    { label: 'Jumlah Hasil (RM)', value: 'RM 0', icon: Activity, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-indigo-200' }
   ];
 
   return (
