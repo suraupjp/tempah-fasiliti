@@ -41,7 +41,7 @@ export default function AdminLogin() {
         <div className="text-center mb-8">
           <img src="/logo.png" alt="Logo Surau" className="h-24 mx-auto mb-4 drop-shadow-md" />
           <h1 className="text-2xl font-bold text-emerald-900">Log Masuk Admin</h1>
-          <p className="text-gray-500 mt-1">Sistem Tempahan Surau PJ Perdana</p>
+          <p className="text-gray-500 mt-1">Sistem Tempahan Kemudahan Surau PJ Perdana</p>
         </div>
 
         {error && (
