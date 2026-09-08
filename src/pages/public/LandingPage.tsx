@@ -15,7 +15,12 @@ export default function LandingPage() {
   const [ticketNo, setTicketNo] = useState('');
   const [loading, setLoading] = useState(false);
   const [adminPhone, setAdminPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [adminPhone, setAdminPhone] = useState('');
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [activeGallery, setActiveGallery] = useState<string[]>([]);
 
+  // Data Borang
   // Data Borang
   const [formData, setFormData] = useState({ name: '', ic: '', phone: '', email: '' });
 
@@ -23,8 +28,8 @@ export default function LandingPage() {
   useEffect(() => {
     const fetchData = async () => {
       // 1. Tarik Fasiliti
-      const { data: facData, error: facError } = await supabase.from('facilities').select('*').eq('active', true);
-      if (facData && !facError) setFacilities(facData);
+      const { data: facData, error: facError } = await supabase.from('').select('*').eq('active', true);
+      if (facData && !facError) set(facData);
 
       // 2. Tarik Nombor WhatsApp Admin
       const { data: setData } = await supabase.from('settings').select('value').eq('key', 'site_config').single();
@@ -38,7 +43,7 @@ export default function LandingPage() {
   }, []);
 
   const duration = (startDate && endDate) ? Math.max(1, differenceInDays(new Date(endDate), new Date(startDate))) : 0;
-  const selectedFacility = facilities.find(f => f.id === selectedFacilityId);
+  const selectedFacility = .find(f => f.id === selectedFacilityId);
   const totalAmount = selectedFacility ? selectedFacility.price * duration : 0;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,13 +171,50 @@ export default function LandingPage() {
       {/* Senarai Fasiliti */}
       <div className="max-w-4xl mx-auto px-4 mt-12 space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">Fasiliti Tersedia</h2>
-        {facilities.length === 0 ? (
+        {.length === 0 ? (
           <p className="text-gray-500">Memuatkan fasiliti...</p>
         ) : (
           facilities.map(facility => (
-            <FacilityCard 
-              key={facility.id} id={facility.id} name={facility.name} description={facility.description} price={facility.price} pricingType={facility.pricing_type} isSelected={selectedFacilityId === facility.id} onSelect={setSelectedFacilityId}
-            />
+            <div key={facility.id} className={`bg-white rounded-xl shadow-sm border ${selectedFacilityId === facility.id ? 'border-emerald-500 ring-2 ring-emerald-500' : 'border-gray-200'} overflow-hidden flex flex-col md:flex-row items-center p-4 gap-6 transition-all`}>
+                
+                {/* Kiri: Info Fasiliti */}
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-gray-900">{facility.name}</h3>
+                  <p className="text-gray-600 mt-2 text-sm">{facility.description}</p>
+                </div>
+
+                {/* Tengah: Gambar Utama (Petak Merah Bos) */}
+                <div 
+                  className="w-full md:w-48 h-32 bg-gray-100 rounded-lg overflow-hidden cursor-pointer relative group flex-shrink-0"
+                  onClick={() => {
+                    setActiveGallery(facility.images || []);
+                    setIsGalleryOpen(true);
+                  }}
+                >
+                  {facility.images && facility.images.length > 0 ? (
+                    <>
+                      <img src={facility.images[0]} alt={facility.name} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-emerald-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-white text-sm font-medium">+ Lihat Galeri</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm font-medium">Tiada Gambar</div>
+                  )}
+                </div>
+
+                {/* Kanan: Harga & Butang */}
+                <div className="text-center md:text-right md:w-48 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6">
+                  <div className="text-2xl font-bold text-gray-900">RM{facility.price}</div>
+                  <div className="text-sm text-gray-500 mb-4">{facility.pricing_type}</div>
+                  <button 
+                    onClick={() => setSelectedFacilityId(facility.id)}
+                    className={`w-full px-6 py-2 border-2 font-bold rounded-lg transition-colors ${selectedFacilityId === facility.id ? 'bg-emerald-600 text-white border-emerald-600' : 'border-emerald-600 text-emerald-600 hover:bg-emerald-50'}`}
+                  >
+                    {selectedFacilityId === facility.id ? 'Telah Dipilih' : 'Pilih'}
+                  </button>
+                </div>
+              </div>
           ))
         )}
       </div>
@@ -214,6 +256,33 @@ export default function LandingPage() {
           </form>
         </div>
       )}
+
+
+{/* Pop-up Skrin Hitam Galeri Gambar */}
+{isGalleryOpen && (
+  <div className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-4">
+    <button 
+      onClick={() => setIsGalleryOpen(false)} 
+      className="absolute top-6 right-8 text-white text-3xl font-bold hover:text-amber-400 transition-colors"
+    >
+      ×
+    </button>
+    <div className="flex overflow-x-auto gap-6 snap-x max-w-5xl p-4 w-full">
+      {activeGallery.length > 0 ? (
+        activeGallery.map((img, index) => (
+          <img key={index} src={img} className="h-64 md:h-96 w-auto object-contain snap-center rounded-lg shadow-2xl" alt={`Galeri ${index + 1}`} />
+        ))
+      ) : (
+        <div className="text-white mx-auto">Gambar belum dimuat naik.</div>
+      )}
+    </div>
+  </div>
+)}
+
+
+
+
+      
     </div>
   );
 }
